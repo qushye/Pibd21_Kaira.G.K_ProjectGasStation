@@ -1,3 +1,8 @@
+using ProjectGasStation.Repositories;
+using ProjectGasStation.Repositories.Implementations;
+using Unity;
+using Unity.Lifetime;
+
 namespace ProjectGasStation
 {
     internal static class Program
@@ -11,7 +16,20 @@ namespace ProjectGasStation
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.Run(CreateContainer().Resolve<FormGasStation>());
+        }
+
+        private static IUnityContainer CreateContainer()
+        {
+            var container = new UnityContainer();
+
+            container.RegisterType<ISupplierRepository, SupplierRepository>(new TransientLifetimeManager());
+            container.RegisterType<ISellerRepository, SellerRepository>(new TransientLifetimeManager());
+            container.RegisterType<IFuelRepository, FuelRepository>(new TransientLifetimeManager());
+            container.RegisterType<IFuelSaleRepository, FuelSaleRepository>(new TransientLifetimeManager());
+            container.RegisterType<IFuelSupplyRepository, FuelSupplyRepository>(new TransientLifetimeManager());
+
+            return container;
         }
     }
 }
