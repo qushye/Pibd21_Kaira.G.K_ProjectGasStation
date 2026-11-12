@@ -1,12 +1,27 @@
-﻿namespace ProjectGasStation.Entities
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace ProjectGasStation.Entities
 {
     public class Supplier
     {
-        public int Id { get; private set; }
+        protected Supplier()
+        {
+        }
 
-        public string CompanyName { get; private set; } = string.Empty;
+        [Key]
+        public int Id { get; internal set; }
 
-        public string ContactPhone { get; private set; } = string.Empty;
+        [Required]
+        [MaxLength(150)]
+        public string CompanyName { get; internal set; } = string.Empty;
+
+        [Required]
+        [MaxLength(30)]
+        public string ContactPhone { get; internal set; } = string.Empty;
+
+        [Browsable(false)]
+        public ICollection<FuelSupply> FuelSupplies { get; internal set; } = new List<FuelSupply>();
 
         public static Supplier CreateEntity(int id, string companyName, string contactPhone)
         {

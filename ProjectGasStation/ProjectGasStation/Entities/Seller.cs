@@ -1,18 +1,35 @@
-﻿using ProjectGasStation.Entities.Enums;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using ProjectGasStation.Entities.Enums;
 
 namespace ProjectGasStation.Entities
 {
     public class Seller
     {
-        public int Id { get; private set; }
+        protected Seller()
+        {
+        }
 
-        public string FirstName { get; private set; } = string.Empty;
+        [Key]
+        public int Id { get; internal set; }
 
-        public string LastName { get; private set; } = string.Empty;
+        [Required]
+        [MaxLength(100)]
+        public string FirstName { get; internal set; } = string.Empty;
 
-        public WorkShift WorkShift { get; private set; }
+        [Required]
+        [MaxLength(100)]
+        public string LastName { get; internal set; } = string.Empty;
 
-        public FuelType AllowedFuelTypes { get; private set; }
+        public WorkShift WorkShift { get; internal set; }
+
+        public FuelType AllowedFuelTypes { get; internal set; }
+
+        [Browsable(false)]
+        public ICollection<FuelSale> FuelSales { get; internal set; } = new List<FuelSale>();
+
+        [Browsable(false)]
+        public ICollection<FuelSupply> FuelSupplies { get; internal set; } = new List<FuelSupply>();
 
         public static Seller CreateEntity(int id, string firstName, string lastName, WorkShift workShift, FuelType allowedFuelTypes)
         {

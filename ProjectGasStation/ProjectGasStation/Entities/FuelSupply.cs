@@ -1,16 +1,35 @@
-﻿namespace ProjectGasStation.Entities
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ProjectGasStation.Entities
 {
     public class FuelSupply
     {
-        public int Id { get; private set; }
+        protected FuelSupply()
+        {
+        }
 
-        public int SupplierId { get; private set; }
+        [Key]
+        public int Id { get; internal set; }
 
-        public int SellerId { get; private set; }
+        public int SupplierId { get; internal set; }
 
-        public DateTime SupplyDate { get; private set; }
+        public int SellerId { get; internal set; }
 
-        public IEnumerable<FuelSupplyFuel> FuelSupplyFuels { get; private set; } = [];
+        [Column(TypeName = "timestamp without time zone")]
+        public DateTime SupplyDate { get; internal set; }
+
+        [ForeignKey(nameof(SupplierId))]
+        [Browsable(false)]
+        public Supplier Supplier { get; internal set; } = null!;
+
+        [ForeignKey(nameof(SellerId))]
+        [Browsable(false)]
+        public Seller Seller { get; internal set; } = null!;
+
+        [Browsable(false)]
+        public ICollection<FuelSupplyFuel> FuelSupplyFuels { get; internal set; } = new List<FuelSupplyFuel>();
 
         public static FuelSupply CreateOperation(int id, int supplierId, int sellerId, IEnumerable<FuelSupplyFuel> fuelSupplyFuels)
         {
@@ -20,7 +39,7 @@
                 SupplierId = supplierId,
                 SellerId = sellerId,
                 SupplyDate = DateTime.Now,
-                FuelSupplyFuels = fuelSupplyFuels ?? []
+                FuelSupplyFuels = fuelSupplyFuels?.ToList() ?? new List<FuelSupplyFuel>()
             };
         }
     }

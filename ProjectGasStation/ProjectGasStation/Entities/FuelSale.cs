@@ -1,22 +1,39 @@
-﻿using ProjectGasStation.Entities.Enums;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using ProjectGasStation.Entities.Enums;
 
 namespace ProjectGasStation.Entities
 {
     public class FuelSale
     {
-        public int Id { get; private set; }
+        protected FuelSale()
+        {
+        }
 
-        public int FuelId { get; private set; }
+        [Key]
+        public int Id { get; internal set; }
 
-        public int SellerId { get; private set; }
+        public int FuelId { get; internal set; }
 
-        public WorkShift WorkShift { get; private set; }
+        public int SellerId { get; internal set; }
 
-        public DateTime SaleDate { get; private set; }
+        public WorkShift WorkShift { get; internal set; }
 
-        public int Quantity { get; private set; }
+        [Column(TypeName = "timestamp without time zone")]
+        public DateTime SaleDate { get; internal set; }
 
-        public double TotalSum { get; private set; }
+        public int Quantity { get; internal set; }
+
+        public double TotalSum { get; internal set; }
+
+        [ForeignKey(nameof(FuelId))]
+        [Browsable(false)]
+        public Fuel Fuel { get; internal set; } = null!;
+
+        [ForeignKey(nameof(SellerId))]
+        [Browsable(false)]
+        public Seller Seller { get; internal set; } = null!;
 
         public static FuelSale CreateOperation(int id, int fuelId, int sellerId, WorkShift workShift, int quantity, double totalSum)
         {
